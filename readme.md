@@ -60,6 +60,18 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 > Quando temos que buscar e aguardar o valor para fazer a assertiva podemos usar o **Should** encadeado logo após o comando da requisição.
 > `comando().should(<comando>, <valor>)`  
 
+#### **`Then`**
+> Parecido com should também permite receber resultados do comando anterior encadeado. Mas com algumas diferenças.
+> `comando().then(<comando>, <valor>)` 
+### 4.1 - Diferenças Should x Then
+|Should|then|
+|:---:|:---:|
+|fica sendo executado</br>ao longo da espera|aguarda receber</br>resultado da promise|
+|retorna sempre o elemento|considera o return|
+|não consegue fazer busca</br>dentro de outra|faz busca dentro de outra|  
+
+---
+
 `equals(<valor>) | equal(<valor>) | eq(<valor>)` - Comando para verificar igualdade.
 
 `not.comando()` - Usado antes dos comandos para indicar negação
@@ -215,6 +227,15 @@ it('Arrays', () => {
 > No click podem ser passadas palavras chave dentro de {} junto na string para simular algum comportamento em tempo de execução.  
 > Alguns parametros:
 > + {multiple: true} - efetua evento em todos clicáveis selecionados.
+
+`cy.get(<valor>, {parametros})` - Seleciona elementos na página.  
+> No get podem ser passadas palavras chave dentro de {} junto na string para simular algum comportamento em tempo de execução.  
+> Alguns parametros:
+> + {timeout: ms} - tempo de espera tentando selecionar o item, por padrão é 4000ms.  
+>
+> OBS: para aplicar timeout padrão para toda aplicação alterar **{"defaultCommandTimeout": \<ms>}** no config.json.
+
+`cy.wait(<ms>)` - Espera no fluxo do teste (não recomendado).  
 
 ## 6 - References
 - [Docs cypress assertions](https://docs.cypress.io/guides/references/assertions)
