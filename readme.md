@@ -72,6 +72,8 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 
 ---
 
+#### Comandos mais comuns
+
 `equals(<valor>) | equal(<valor>) | eq(<valor>)` - Comando para verificar igualdade.
 
 `not.comando()` - Usado antes dos comandos para indicar negação
@@ -82,7 +84,7 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 
 ---
 
-### 4.1 - Types
+### 4.2 - Types
 `to.be.a(<tipo>)` - Verifica se o tipo do valor é igual o tipo passado por parâmetro.
 
 <details>
@@ -103,7 +105,7 @@ it('Types', () => {
 
 ---
 
-### 4.2 - Strings
+### 4.3 - Strings
 `length(<valor>)` - Verifica tamanho da string.  
 
 `contains(<valor>)` - Verifica se string possui valor passado por parâmetro.  
@@ -126,7 +128,7 @@ it('String', () => {
 
 ---
 
-### 4.3 - Numbers
+### 4.4 - Numbers
 
 `below(<valor>)` - valor esperado deve ser abaixo do valor passado por parametro.
 
@@ -154,7 +156,7 @@ it('Numbers', () => {
 
 ---
 
-### 4.4 - Object
+### 4.5 - Object
 
 `deep.equal() | eql()` - Compara objetos pelo conteúdo.
 
@@ -186,7 +188,7 @@ it('Numbers', () => {
 
 ---
 
-### 4.5 - Arrays
+### 4.6 - Arrays
 
 `to.have.members(<valor>)` - Verifica se array possui **todos** os seguintes membros passados por parâmetro.
 
