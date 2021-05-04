@@ -37,7 +37,46 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 ---  
 </br>
 
-## 3 - Hooks
+## 3 - Helpers
+
+`cy.wrap(<objeto>)` - Encapsula como um objeto do cypress. Também usado para gerenciar promises externas.  
+
+<details>
+<summary>Exemplos</summary>
+
+```js
+it('Wrap...', () => {
+    const obj = {name: 'User', age: 20}
+    cy.wrap(obj).should('have.property', 'name')
+
+    cy.visit('https://www.wcaquino.me/cypress/componentes.html')
+    cy.get('#formNome').then($el => {
+        // $el.val('funciona com jquery') não é melhor opção, não mostra no log
+        cy.wrap($el).type('funciona com cypress')
+    })
+})
+```
+</details>  
+
+`comando.its(<propriedade>)` - Retorna uma propriedade do objeto que está no meio da cadeia do cypress.  
+
+<details>
+<summary>Exemplos</summary>
+
+```js
+it.only('Its...', () => {
+    const obj = {name: 'User', age: 20, endereco: {rua: 'josé ventura'}}
+    cy.wrap(obj).its('name').should('be.equal', 'User')
+    cy.wrap(obj).its('endereco').should('have.property', 'rua')
+    // cy.wrap(obj).its('endereco').its('rua').should('contain', 'ventura')
+    cy.wrap(obj).its('endereco.rua').should('contain', 'ventura')
+})
+```
+</details>  
+
+---
+
+## 4 - Hooks
 
 `before(<função>)` - (Before All) Executa função passada **antes** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
 
@@ -50,7 +89,7 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 ---  
 </br>
 
-## 4 - Assertivas
+## 5 - Assertivas
 
 #### **`Expect`**
 > Quando já possuimos o valor para fazer a assertiva podemos usar o **Expect**.  
@@ -63,7 +102,7 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 #### **`Then`**
 > Parecido com should também permite receber resultados do comando anterior encadeado. Mas com algumas diferenças.
 > `comando().then(<comando>, <valor>)` 
-### 4.1 - Diferenças Should x Then
+### 5.1 - Diferenças Should x Then
 |Should|then|
 |:---:|:---:|
 |fica sendo executado</br>ao longo da espera|aguarda receber</br>resultado da promise|
@@ -84,7 +123,7 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 
 ---
 
-### 4.2 - Types
+### 5.2 - Types
 `to.be.a(<tipo>)` - Verifica se o tipo do valor é igual o tipo passado por parâmetro.
 
 <details>
@@ -105,7 +144,7 @@ it('Types', () => {
 
 ---
 
-### 4.3 - Strings
+### 5.3 - Strings
 `length(<valor>)` - Verifica tamanho da string.  
 
 `contains(<valor>)` - Verifica se string possui valor passado por parâmetro.  
@@ -128,7 +167,7 @@ it('String', () => {
 
 ---
 
-### 4.4 - Numbers
+### 5.4 - Numbers
 
 `below(<valor>)` - valor esperado deve ser abaixo do valor passado por parametro.
 
@@ -156,7 +195,7 @@ it('Numbers', () => {
 
 ---
 
-### 4.5 - Object
+### 5.5 - Object
 
 `deep.equal() | eql()` - Compara objetos pelo conteúdo.
 
@@ -188,7 +227,7 @@ it('Numbers', () => {
 
 ---
 
-### 4.6 - Arrays
+### 5.6 - Arrays
 
 `to.have.members(<valor>)` - Verifica se array possui **todos** os seguintes membros passados por parâmetro.
 
@@ -212,7 +251,7 @@ it('Arrays', () => {
 ---  
 </br>
 
-## 5 - Interação com DOM
+## 6 - Interação com DOM
 
 `type(<texto [{expressão}]>, [{ delay: <ms> }])` - Escreve texto no elemento selecionado previamente. 
 > No type podem ser passadas palavras chave dentro de {} junto na string para simular algum comportamento em tempo de execução.  
@@ -239,5 +278,5 @@ it('Arrays', () => {
 
 `cy.wait(<ms>)` - Espera no fluxo do teste (não recomendado).  
 
-## 6 - References
+## 7 - References
 - [Docs cypress assertions](https://docs.cypress.io/guides/references/assertions)
