@@ -21,8 +21,8 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 
 `comando.skip()` - Pula o teste ou um grupo de testes.
 
-`comando.only()` - Executa apenas o teste ou grupo especificado.
-> **`Only`** Pega apenas um por arquivo para executar. Se houver mais de um vai ser executo o ultimo encontrado.
+`comando.only()` - Executa apenas o teste ou grupo especificado.  
+**`Only`** Pega apenas um por arquivo para executar. Se houver mais de um vai ser executo o ultimo encontrado.
 
 `debug()` - Pegar mais detalhes sobre algum determinado ponto do teste e imprime no console infos.
 
@@ -33,6 +33,8 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 `cy.contains(<valor>)` - Busca elementos pelo texto.
 
 `cy.reload()` - Recarrega a página.
+
+`cy.window()` - Acessa objeto window da página.
 
 ---  
 </br>
@@ -58,7 +60,7 @@ it('Wrap...', () => {
 ```
 </details>  
 
-`comando.its(<propriedade>)` - Retorna uma propriedade do objeto que está no meio da cadeia do cypress.  
+`comando.its(<propriedade>)` - Acessa uma propriedade do objeto que está no meio da cadeia do cypress.  
 
 <details>
 <summary>Exemplos</summary>
@@ -70,6 +72,19 @@ it.only('Its...', () => {
     cy.wrap(obj).its('endereco').should('have.property', 'rua')
     // cy.wrap(obj).its('endereco').its('rua').should('contain', 'ventura')
     cy.wrap(obj).its('endereco.rua').should('contain', 'ventura')
+})
+```
+</details>  
+
+`comando.invoke(<função>, [parametros])` - Acessa uma função do objeto que está no meio da cadeia do cypress.  
+
+<details>
+<summary>Exemplos</summary>
+
+```js
+it.only('Invoke...', () => {
+    const soma = (a, b) => a + b;
+    cy.wrap({ fn: soma }).invoke('fn', 2, 5).should('be.equal', 7)
 })
 ```
 </details>  
