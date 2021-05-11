@@ -36,6 +36,9 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 
 `cy.window()` - Acessa objeto window da página.
 
+`comando.as(<'alias'>)` - Cria um nome para o evento, operação etc.
+
+
 ---  
 </br>
 
@@ -293,5 +296,41 @@ it('Arrays', () => {
 
 `cy.wait(<ms>)` - Espera no fluxo do teste (não recomendado).  
 
-## 7 - References
+
+`cy.on(<evento>, fn())` - Espera eventos que ocorrem no browser, executa função passada.  
+<details>
+<summary>Exemplos</summary>
+
+```js
+it('Alert...', () => {
+    cy.get('#alert').click()
+    cy.on('window:alert', msg => {
+        expect(msg).to.be.equal('Alert Simples')
+    })
+})
+```
+</details>
+
+---
+## 7 - Mocks
+
+`cy.stub(<regex>)` - Substitui uma função, armazena iterações e controla comportamento de retorno.  
+
+<details>
+<summary>Exemplos</summary>
+
+```js
+it('Alert com mock...', () => {
+    const stub = cy.stub().as('alerta')
+    cy.on('window:alert', stub)
+    cy.get('#alert').click().then(() => {
+        expect(stub.getCall(0)).to.be.calledWith('Alert Simples')
+    })
+})
+```
+</details>
+
+---
+
+## 8 - References
 - [Docs cypress assertions](https://docs.cypress.io/guides/references/assertions)
