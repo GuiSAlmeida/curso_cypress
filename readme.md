@@ -314,18 +314,53 @@ it('Alert...', () => {
 ---
 ## 7 - Mocks
 
-`cy.stub(<regex>)` - Substitui uma função, armazena iterações e controla comportamento de retorno.  
+`cy.stub()` - Substitui uma função, armazena iterações e controla comportamento de retorno.  
+📄[Doc stub](https://docs.cypress.io/api/commands/stub)
+📄[Doc eventos window](https://docs.cypress.io/api/events/catalog-of-events#Event-Types)
+<details>
+<summary>Sintaxe</summary>  
 
+```JS  
+cy.stub()
+cy.stub(object, method)
+cy.stub(object, method, replacerFn)
+```
+</details>
 <details>
 <summary>Exemplos</summary>
 
 ```js
-it('Alert com mock...', () => {
+it('Alert com stub...', () => {
     const stub = cy.stub().as('alerta')
     cy.on('window:alert', stub)
     cy.get('#alert').click().then(() => {
         expect(stub.getCall(0)).to.be.calledWith('Alert Simples')
     })
+})
+it('Stub com várias chamadas...', () => {
+    const stub = cy.stub().as('alerta')
+    cy.on('window:alert', stub)
+
+    cy.get('#formCadastrar').click().then(() => {
+        expect(stub.getCall(0)).to.be.calledWith('Nome eh obrigatorio')
+    })
+    
+    cy.get('#formNome').type('Guilherme')
+
+    cy.get('#formCadastrar').click().then(() => {
+        expect(stub.getCall(1)).to.be.calledWith('Sobrenome eh obrigatorio')
+    })
+    
+    cy.get('[data-cy=dataSobrenome]').type('Almeida')
+    
+    cy.get('#formCadastrar').click().then(() => {
+        expect(stub.getCall(2)).to.be.calledWith('Sexo eh obrigatorio')
+    })
+    
+    cy.get('#formSexoMasc').check()
+    cy.get('#formCadastrar').click()
+
+    cy.get('#resultado > :nth-child(1)').should('have.text', 'Cadastrado!')
 })
 ```
 </details>
