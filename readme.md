@@ -11,7 +11,6 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 /// <reference types="cypress" />
 ```
 ---  
-</br>
 
 ## 2 - Comandos gerais
 
@@ -40,7 +39,6 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 
 
 ---  
-</br>
 
 ## 3 - Helpers
 
@@ -105,7 +103,6 @@ it.only('Invoke...', () => {
 `afterEach(<função>)` - (After Each) Executa função passada **depois** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
 
 ---  
-</br>
 
 ## 5 - Assertivas
 
@@ -267,7 +264,6 @@ it('Arrays', () => {
 </details>
 
 ---  
-</br>
 
 ## 6 - Interação com DOM
 
