@@ -35,7 +35,7 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 
 `cy.window()` - Acessa objeto window da página.
 
-`comando.as(<'alias'>)` - Cria um nome para o evento, operação etc.
+`comando.as(<'alias'>)` - Cria um nome para o evento, operação etc. Podem ser capturados com: `cy.get('@alias')`
 
 
 ---  
@@ -362,6 +362,23 @@ it('Stub com várias chamadas...', () => {
 </details>
 
 ---
+## 8 - Plugins
+No arquivo `cypress/support/index.js` adicionar a importação do plugin:  
+```js
+require('nome plugin')
+```  
 
-## 8 - References
+
+[`Xpath`](https://github.com/cypress-io/cypress-xpath)
+```JS  
+it('finds list items', () => {
+    cy.xpath('//ul[@class="todo-list"]//li')
+    .should('have.length', 3)
+})
+```
+[xpath cookbook](https://www.red-gate.com/simple-talk/development/dotnet-development/xpath-css-dom-and-selenium-the-rosetta-stone/)
+
+
+## 9 - 📄 Documentações
 - [Docs cypress assertions](https://docs.cypress.io/guides/references/assertions)
+- [Doc Plugins](https://docs.cypress.io/plugins/directory)

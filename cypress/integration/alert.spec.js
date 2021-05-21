@@ -60,7 +60,7 @@ describe('Work with Alerts', () => {
         cy.get('#prompt').click()
     })
 
-    it.only('Desafio cadastrar...', () => {
+    it('Desafio cadastrar...', () => {
         const stub = cy.stub().as('alerta')
         cy.on('window:alert', stub)
 
