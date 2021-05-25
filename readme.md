@@ -37,7 +37,31 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 
 `comando.as(<'alias'>)` - Cria um nome para o evento, operação etc. Podem ser capturados com: `cy.get('@alias')`
 
+### 2.1 - Criar comando personalizado
+No arquivo `/cypress/support/commands.js` podem ser adicionados comandos personalizados, passando a seguinte expressão:
+```js
+Cypress.Commands.add("nomeComando", callback())
+```
 
+> Não precisa importá-lo no arquivo de teste.
+
+<details>
+<summary>Exemplos</summary>
+
+```js
+// código no arquivo commands.js
+Cypress.Commands.add("clickAlert", (locator, message) => {
+    cy.get(locator).click()
+    cy.on('window:alert', msg => {
+        expect(msg).to.be.equal(message)
+    })
+})
+// código no arquivo de testes
+it('Alert...', () => {
+    cy.clickAlert('#alert', 'Alert Simples')
+})
+```
+</details>  
 ---  
 
 ## 3 - Helpers
@@ -311,8 +335,7 @@ it('Alert...', () => {
 ## 7 - Mocks
 
 `cy.stub()` - Substitui uma função, armazena iterações e controla comportamento de retorno.  
-📄[Doc stub](https://docs.cypress.io/api/commands/stub)
-📄[Doc eventos window](https://docs.cypress.io/api/events/catalog-of-events#Event-Types)
+
 <details>
 <summary>Sintaxe</summary>  
 
@@ -361,6 +384,29 @@ it('Stub com várias chamadas...', () => {
 ```
 </details>
 
+`cy.fixture(<arquivo>)` - Importa um arquivo para mock que esteja criado dentro da pasta /cypress/fixtures.  
+
+<details>
+<summary>Exemplos</summary>
+
+```js
+it('Get data form fixture file', () => {
+    cy.fixture('userData').as('user').then(function () {
+        cy.get('#formNome').type(this.user.nome)
+        cy.get('#formSobrenome').type(this.user.sobrenome)
+        cy.get(`[name=formSexo][value=${this.user.sexo}]`).click()
+        cy.get(`[name=formComidaFavorita][value=${this.user.comida}]`).click()
+        cy.get('#formEscolaridade').select(this.user.escolaridade)
+        cy.get('#formEsportes').select(this.user.esportes)
+    })
+
+    cy.get('#formCadastrar').click()
+    cy.get('#resultado > :nth-child(1)').should('have.text', 'Cadastrado!')
+})
+
+```
+</details>  
+
 ---
 ## 8 - Plugins
 No arquivo `cypress/support/index.js` adicionar a importação do plugin:  
@@ -376,9 +422,10 @@ it('finds list items', () => {
     .should('have.length', 3)
 })
 ```
-[xpath cookbook](https://www.red-gate.com/simple-talk/development/dotnet-development/xpath-css-dom-and-selenium-the-rosetta-stone/)
-
-
+---
 ## 9 - 📄 Documentações
 - [Docs cypress assertions](https://docs.cypress.io/guides/references/assertions)
 - [Doc Plugins](https://docs.cypress.io/plugins/directory)
+- [Doc stub](https://docs.cypress.io/api/commands/stub)
+- [Doc eventos window](https://docs.cypress.io/api/events/catalog-of-events#Event-Types)
+- [xpath cookbook](https://www.red-gate.com/simple-talk/development/dotnet-development/xpath-css-dom-and-selenium-the-rosetta-stone/)
