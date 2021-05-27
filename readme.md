@@ -14,35 +14,45 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 
 ## 2 - Comandos gerais
 
-`it()` - serve para descrever e criar testes para cada caso.
+#### **`it()`**  
+serve para descrever e criar testes para cada caso.
 
-`describe()` - Serve para descrever e agrupar testes.
+#### **`describe()`**  
+Serve para descrever e agrupar testes.
 
-`comando.skip()` - Pula o teste ou um grupo de testes.
+#### **`comando.skip()`**  
+Pula o teste ou um grupo de testes.
 
-`comando.only()` - Executa apenas o teste ou grupo especificado.  
-**`Only`** Pega apenas um por arquivo para executar. Se houver mais de um vai ser executo o ultimo encontrado.
+#### **`comando.only()`**  
+Executa apenas o teste ou grupo especificado.  
+> **Only** Pega apenas um por arquivo para executar. Se houver mais de um vai ser executo o ultimo encontrado.
 
-`debug()` - Pegar mais detalhes sobre algum determinado ponto do teste e imprime no console infos.
+#### **`debug()`**  
+Pegar mais detalhes sobre algum determinado ponto do teste e imprime no console infos.
 
-`pause()` - Pausa a execução e permite ser executado passo a passo.
+#### **`pause()`**  
+Pausa a execução e permite ser executado passo a passo.
 
-`cy.get(<valor>)` - Busca elementos por classe, tag, id, etc.
+#### **`cy.get(<valor>)`**  
+Busca elementos por classe, tag, id, etc.
 
-`cy.contains(<valor>)` - Busca elementos pelo texto.
+#### **`cy.contains(<valor>)`**  
+Busca elementos pelo texto.
 
-`cy.reload()` - Recarrega a página.
+#### **`cy.reload()`**  
+Recarrega a página.
 
-`cy.window()` - Acessa objeto window da página.
+#### **`cy.window()`**  
+Acessa objeto window da página.
 
-`comando.as(<'alias'>)` - Cria um nome para o evento, operação etc. Podem ser capturados com: `cy.get('@alias')`
+#### **`comando.as(<'alias'>)`**  
+Cria um nome para o evento, operação etc. Podem ser capturados com: `cy.get('@alias')`
 
 ### 2.1 - Criar comando personalizado
 No arquivo `/cypress/support/commands.js` podem ser adicionados comandos personalizados, passando a seguinte expressão:
 ```js
 Cypress.Commands.add("nomeComando", callback())
-```
-
+```  
 > Não precisa importá-lo no arquivo de teste.
 
 <details>
@@ -66,7 +76,8 @@ it('Alert...', () => {
 
 ## 3 - Helpers
 
-`cy.wrap(<objeto>)` - Encapsula como um objeto do cypress. Também usado para gerenciar promises externas.  
+#### **`cy.wrap(<objeto>)`**  
+Encapsula como um objeto do cypress. Também usado para gerenciar promises externas.  
 
 <details>
 <summary>Exemplos</summary>
@@ -85,7 +96,8 @@ it('Wrap...', () => {
 ```
 </details>  
 
-`comando.its(<propriedade>)` - Acessa uma propriedade do objeto que está no meio da cadeia do cypress.  
+#### **`comando.its(<propriedade>)`**  
+Acessa uma propriedade do objeto que está no meio da cadeia do cypress.  
 
 <details>
 <summary>Exemplos</summary>
@@ -101,7 +113,8 @@ it.only('Its...', () => {
 ```
 </details>  
 
-`comando.invoke(<função>, [parametros])` - Acessa uma função do objeto que está no meio da cadeia do cypress.  
+#### **`comando.invoke(<função>, [parametros])`**  
+Acessa uma função do objeto que está no meio da cadeia do cypress.  
 
 <details>
 <summary>Exemplos</summary>
@@ -114,7 +127,8 @@ it.only('Invoke...', () => {
 ```
 </details>  
 
-`comando.each(<callback()>)` - Semelhante ao `foreach` porém é nativo do cypress, percorre lista de elementos e retorna em uma função callback cada elemento em jquery que podem ser testados de diversas maneiras.  
+#### **`comando.each(<callback()>)`**  
+Semelhante ao `foreach` da JS porém é nativo do cypress, percorre lista de elementos e retorna em uma função callback cada elemento em jquery que podem ser testados de diversas maneiras.  
 
 <details>
 <summary>Exemplos</summary>
@@ -132,11 +146,14 @@ it('Select almost all with each...', () => {
 ```
 </details>  
 
-`cy.wait(<ms>)` - Espera no fluxo do teste.  
+#### **`cy.wait(<ms>)`**  
+Espera no fluxo do teste.  
 
-`cy.tick(<ms>)` - Avança o tempo no fluxo do teste. 
+#### **`cy.tick(<ms>)`**  
+Avança o tempo no fluxo do teste. 
 
-`cy.clock(<Date()>)` - Pode ser usado para definir/resetar uma data padrão no teste.  
+#### **`cy.clock(<Date()>)`**
+Pode ser usado para definir/resetar uma data padrão no teste.  
 > Não pode ser executado mais de 1x no teste.
 <details>
 <summary>Exemplos</summary>
@@ -155,13 +172,17 @@ it('Going back to the past', () => {
 
 ## 4 - Hooks
 
-`before(<callback()>)` - (Before All) Executa função callback passada **antes** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
+#### **`before(<callback()>)`**
+(Before All) Executa função callback passada **antes** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
 
-`beforeEach(<callback()>)` - (Before Each) Executa função callback passada **antes** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
+#### **`beforeEach(<callback()>)`**  
+(Before Each) Executa função callback passada **antes** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
 
-`after(<callback()>)` - (After All) Executa função callback passada **depois** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
+#### **`after(<callback()>)`**  
+(After All) Executa função callback passada **depois** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
 
-`afterEach(<callback()>)` - (After Each) Executa função callback passada **depois** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
+#### **`afterEach(<callback()>)`**  
+(After Each) Executa função callback passada **depois** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
 
 ---  
 
@@ -187,20 +208,25 @@ it('Going back to the past', () => {
 
 ---
 
-#### Comandos mais comuns
+### 5.2 Comandos mais comuns
 
-`equals(<valor>) | equal(<valor>) | eq(<valor>)` - Comando para verificar igualdade.
+#### **`equals(<valor>) | equal(<valor>) | eq(<valor>)`**  
+Comando para verificar igualdade.
 
-`not.comando()` - Usado antes dos comandos para indicar negação
+#### **`not.comando()`**  
+Usado antes dos comandos para indicar negação
 
-`to.be.comando()` - Pode ser usado para melhorar legibilidade do teste.
+#### **`to.be.comando()`**  
+Pode ser usado para melhorar legibilidade do teste.
 
-`empty` - Verifica se está vazio.
+#### **`empty`**  
+Verifica se está vazio.
 
 ---
 
-### 5.2 - Types
-`to.be.a(<tipo>)` - Verifica se o tipo do valor é igual o tipo passado por parâmetro.
+### 5.3 - Types
+#### **`to.be.a(<tipo>)`**  
+Verifica se o tipo do valor é igual o tipo passado por parâmetro.
 
 <details>
 <summary>Exemplos</summary>
@@ -220,12 +246,15 @@ it('Types', () => {
 
 ---
 
-### 5.3 - Strings
-`length(<valor>)` - Verifica tamanho da string.  
+### 5.4 - Strings
+#### **`length(<valor>)`**  
+Verifica tamanho da string.  
 
-`contains(<valor>)` - Verifica se string possui valor passado por parâmetro.  
+#### **`contains(<valor>)`**  
+Verifica se string possui valor passado por parâmetro.  
 
-`match(<regex>)` - Verifica se string possui regex passada por parâmetro.  
+#### **`match(<regex>)`**  
+Verifica se string possui regex passada por parâmetro.  
 
 <details>
 <summary>Exemplos</summary>
@@ -243,13 +272,16 @@ it('String', () => {
 
 ---
 
-### 5.4 - Numbers
+### 5.5 - Numbers
 
-`below(<valor>)` - valor esperado deve ser abaixo do valor passado por parametro.
+#### **`below(<valor>)`**  
+valor esperado deve ser abaixo do valor passado por parametro.
 
-`above(<valor>)` - valor esperado deve ser acima do valor passado por parametro.
+#### **`above(<valor>)`**  
+valor esperado deve ser acima do valor passado por parametro.
 
-`closeTo(<valor>, <delta>)` - Verifica se valor é próximo do valor passado de acordo com a precisão passada no delta.
+#### **`closeTo(<valor>, <delta>)`**  
+Verifica se valor é próximo do valor passado de acordo com a precisão passada no delta.
 
 <details>
 <summary>Exemplos</summary>
@@ -271,13 +303,16 @@ it('Numbers', () => {
 
 ---
 
-### 5.5 - Object
+### 5.6 - Object
 
-`deep.equal() | eql()` - Compara objetos pelo conteúdo.
+#### **`deep.equal() | eql()`**  
+Compara objetos pelo conteúdo.
 
-`include(<valor>)` - Verifica se possui parte do valor passada por parametro.
+#### **`include(<valor>)`**  
+Verifica se possui parte do valor passada por parametro.
 
-`have.property(prop, [valor])` - Compara se existe propriedade objeto, como também valor se for passado no segundo parâmetro.
+#### **`have.property(prop, [valor])`**  
+Compara se existe propriedade objeto, como também valor se for passado no segundo parâmetro.
 
 <details>
 <summary>Exemplos</summary>
@@ -303,11 +338,13 @@ it('Numbers', () => {
 
 ---
 
-### 5.6 - Arrays
+### 5.7 - Arrays
 
-`to.have.members(<valor>)` - Verifica se array possui **todos** os seguintes membros passados por parâmetro.
+#### **`to.have.members(<valor>)`**  
+Verifica se array possui **todos** os seguintes membros passados por parâmetro.
 
-`to.include.members(<valor>)` - Verifica se array possui os seguintes membros passados por parâmetro.
+#### **`to.include.members(<valor>)`**  
+Verifica se array possui os seguintes membros passados por parâmetro.
 
 <details>
 <summary>Exemplos</summary>
@@ -328,7 +365,8 @@ it('Arrays', () => {
 
 ## 6 - Interação com DOM
 
-`type(<texto [{expressão}]>, [{ delay: <ms> }])` - Escreve texto no elemento selecionado previamente. 
+#### **`type(<texto [{expressão}]>, [{ delay: <ms> }])`**  
+Escreve texto no elemento selecionado previamente. 
 > No type podem ser passadas palavras chave dentro de {} junto na string para simular algum comportamento em tempo de execução.  
 > Algumas expressões:
 > + {backspace} - apaga um caractere
@@ -337,14 +375,17 @@ it('Arrays', () => {
 > No campo opcional `delay` é possivel setar um tempo em milisegundos, útil para campos de texto que possuem eventos JS como *debounce* que a medida que se digita ocorre algum evento.
 
 
-`clear()` - Apaga um campo de texto. 
+#### **`clear()`**  
+Apaga um campo de texto. 
 
-`click({parametros})` - Efetua evento de click.  
+#### **`click({parametros})`**  
+Efetua evento de click.  
 > No click podem ser passadas palavras chave dentro de {} junto na string para simular algum comportamento em tempo de execução.  
 > Alguns parametros:
 > + {multiple: true} - efetua evento em todos clicáveis selecionados.
 
-`cy.get(<valor>, {parametros})` - Seleciona elementos na página.  
+#### **`cy.get(<valor>, {parametros})`**  
+Seleciona elementos na página.  
 > No get podem ser passadas palavras chave dentro de {} junto na string para simular algum comportamento em tempo de execução.  
 > Alguns parametros:
 > + {timeout: ms} - tempo de espera tentando selecionar o item, por padrão é 4000ms.  
@@ -352,7 +393,8 @@ it('Arrays', () => {
 > OBS: para aplicar timeout padrão para toda aplicação alterar **{"defaultCommandTimeout": \<ms>}** no config.json.
 
 
-`cy.on(<evento>, fn())` - Espera eventos que ocorrem no browser, executa função passada.  
+#### **`cy.on(<evento>, fn())`**  
+Espera eventos que ocorrem no browser, executa função passada.  
 <details>
 <summary>Exemplos</summary>
 
@@ -369,7 +411,8 @@ it('Alert...', () => {
 ---
 ## 7 - Mocks
 
-`cy.stub()` - Substitui uma função, armazena iterações e controla comportamento de retorno.  
+#### **`cy.stub()`**  
+Substitui uma função, armazena iterações e controla comportamento de retorno.  
 
 <details>
 <summary>Sintaxe</summary>  
@@ -419,7 +462,8 @@ it('Stub com várias chamadas...', () => {
 ```
 </details>
 
-`cy.fixture(<arquivo>)` - Importa um arquivo para mock que esteja criado dentro da pasta /cypress/fixtures.  
+#### **`cy.fixture(<arquivo>)`**  
+Importa um arquivo para mock que esteja criado dentro da pasta /cypress/fixtures.  
 
 <details>
 <summary>Exemplos</summary>
@@ -449,8 +493,8 @@ No arquivo `cypress/support/index.js` adicionar a importação do plugin:
 require('nome plugin')
 ```  
 
-
-[`Xpath`](https://github.com/cypress-io/cypress-xpath)
+#### **`Xpath`**
+https://github.com/cypress-io/cypress-xpath
 ```JS  
 it('finds list items', () => {
     cy.xpath('//ul[@class="todo-list"]//li')
