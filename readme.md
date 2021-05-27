@@ -114,17 +114,54 @@ it.only('Invoke...', () => {
 ```
 </details>  
 
+`comando.each(<callback()>)` - Semelhante ao `foreach` porém é nativo do cypress, percorre lista de elementos e retorna em uma função callback cada elemento em jquery que podem ser testados de diversas maneiras.  
+
+<details>
+<summary>Exemplos</summary>
+
+```js
+it('Select almost all with each...', () => {
+    cy.get('[name=formComidaFavorita]').each($el => {
+        if($el.val() !== 'vegetariano') {
+            // $el.click()
+            // melhor tornar o $el um objeto do cypress
+            cy.wrap($el).click() 
+        }
+    })
+})
+```
+</details>  
+
+`cy.wait(<ms>)` - Espera no fluxo do teste.  
+
+`cy.tick(<ms>)` - Avança o tempo no fluxo do teste. 
+
+`cy.clock(<Date()>)` - Pode ser usado para definir/resetar uma data padrão no teste.  
+> Não pode ser executado mais de 1x no teste.
+<details>
+<summary>Exemplos</summary>
+
+```js
+it('Going back to the past', () => {
+    const dt = new Date(1987, 2, 24, 2, 0, 0)
+    cy.clock(dt.getTime())
+    cy.get('#buttonNow').click()
+    cy.get('#resultado > span').should('contain', '24/03/1987')
+})
+```
+</details>  
+
 ---
 
 ## 4 - Hooks
 
-`before(<função>)` - (Before All) Executa função passada **antes** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
+`before(<callback()>)` - (Before All) Executa função callback passada **antes** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
 
-`beforeEach(<função>)` - (Before Each) Executa função passada **antes** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
+`beforeEach(<callback()>)` - (Before Each) Executa função callback passada **antes** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
 
-`after(<função>)` - (After All) Executa função passada **depois** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
+`after(<callback()>)` - (After All) Executa função callback passada **depois** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
 
-`afterEach(<função>)` - (After Each) Executa função passada **depois** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
+`afterEach(<callback()>)` - (After Each) Executa função callback passada **depois** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
 
 ---  
 
@@ -313,8 +350,6 @@ it('Arrays', () => {
 > + {timeout: ms} - tempo de espera tentando selecionar o item, por padrão é 4000ms.  
 >
 > OBS: para aplicar timeout padrão para toda aplicação alterar **{"defaultCommandTimeout": \<ms>}** no config.json.
-
-`cy.wait(<ms>)` - Espera no fluxo do teste (não recomendado).  
 
 
 `cy.on(<evento>, fn())` - Espera eventos que ocorrem no browser, executa função passada.  
