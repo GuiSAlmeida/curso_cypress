@@ -23,5 +23,5 @@ require('cypress-xpath')
 
 // Suporta atributos personalizados: (data-wc)
 Cypress.SelectorPlayground.defaults({
-    selectorPriority: ['data-wc', 'id', 'class', 'attributes', 'data-cy', 'data-test', 'data-testid', 'tag', 'nth-child']
+    selectorPriority: ['data-wc','data-cy', 'data-test', 'data-testid', 'id', 'class', 'attributes', 'tag', 'nth-child']
 })

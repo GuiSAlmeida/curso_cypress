@@ -1,6 +1,6 @@
 # Curso Cypress
 
-## 1 - Intro  
+## 1. Intro  
 
 Cypress utiliza promises em tudo, ele tem seu próprio ciclo de vida.  
 
@@ -12,7 +12,7 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 ```
 ---  
 
-## 2 - Comandos gerais
+## 2. Comandos gerais
 
 #### **`it()`**  
 serve para descrever e criar testes para cada caso.
@@ -48,7 +48,7 @@ Acessa objeto window da página.
 #### **`comando.as(<'alias'>)`**  
 Cria um nome para o evento, operação etc. Podem ser capturados com: `cy.get('@alias')`
 
-### 2.1 - Criar comando personalizado
+### 2.1 Criar comando personalizado
 No arquivo `/cypress/support/commands.js` podem ser adicionados comandos personalizados, passando a seguinte expressão:
 ```js
 Cypress.Commands.add("nomeComando", callback())
@@ -72,9 +72,9 @@ it('Alert...', () => {
 })
 ```
 </details>  
----  
 
-## 3 - Helpers
+---  
+## 3. Helpers
 
 #### **`cy.wrap(<objeto>)`**  
 Encapsula como um objeto do cypress. Também usado para gerenciar promises externas.  
@@ -170,7 +170,7 @@ it('Going back to the past', () => {
 
 ---
 
-## 4 - Hooks
+## 4. Hooks
 
 #### **`before(<callback()>)`**
 (Before All) Executa função callback passada **antes** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
@@ -186,7 +186,7 @@ it('Going back to the past', () => {
 
 ---  
 
-## 5 - Assertivas
+## 5. Assertivas
 
 #### **`Expect`**
 > Quando já possuimos o valor para fazer a assertiva podemos usar o **Expect**.  
@@ -199,7 +199,7 @@ it('Going back to the past', () => {
 #### **`Then`**
 > Parecido com should também permite receber resultados do comando anterior encadeado. Mas com algumas diferenças.
 > `comando().then(<comando>, <valor>)` 
-### 5.1 - Diferenças Should x Then
+### 5.1 Diferenças Should x Then
 |Should|then|
 |:---:|:---:|
 |fica sendo executado</br>ao longo da espera|aguarda receber</br>resultado da promise|
@@ -208,7 +208,7 @@ it('Going back to the past', () => {
 
 ---
 
-### 5.2 Comandos mais comuns
+### 5.2 Comandos comuns
 
 #### **`equals(<valor>) | equal(<valor>) | eq(<valor>)`**  
 Comando para verificar igualdade.
@@ -224,7 +224,7 @@ Verifica se está vazio.
 
 ---
 
-### 5.3 - Types
+### 5.3 Types
 #### **`to.be.a(<tipo>)`**  
 Verifica se o tipo do valor é igual o tipo passado por parâmetro.
 
@@ -246,7 +246,7 @@ it('Types', () => {
 
 ---
 
-### 5.4 - Strings
+### 5.4 Strings
 #### **`length(<valor>)`**  
 Verifica tamanho da string.  
 
@@ -272,7 +272,7 @@ it('String', () => {
 
 ---
 
-### 5.5 - Numbers
+### 5.5 Numbers
 
 #### **`below(<valor>)`**  
 valor esperado deve ser abaixo do valor passado por parametro.
@@ -303,7 +303,7 @@ it('Numbers', () => {
 
 ---
 
-### 5.6 - Object
+### 5.6 Object
 
 #### **`deep.equal() | eql()`**  
 Compara objetos pelo conteúdo.
@@ -338,7 +338,7 @@ Compara se existe propriedade objeto, como também valor se for passado no segun
 
 ---
 
-### 5.7 - Arrays
+### 5.7 Arrays
 
 #### **`to.have.members(<valor>)`**  
 Verifica se array possui **todos** os seguintes membros passados por parâmetro.
@@ -363,7 +363,7 @@ it('Arrays', () => {
 
 ---  
 
-## 6 - Interação com DOM
+## 6. Interação com DOM
 
 #### **`type(<texto [{expressão}]>, [{ delay: <ms> }])`**  
 Escreve texto no elemento selecionado previamente. 
@@ -393,7 +393,7 @@ Seleciona elementos na página.
 > OBS: para aplicar timeout padrão para toda aplicação alterar **{"defaultCommandTimeout": \<ms>}** no config.json.
 
 
-#### **`cy.on(<evento>, fn())`**  
+#### **`cy.on(<evento>, callback())`**  
 Espera eventos que ocorrem no browser, executa função passada.  
 <details>
 <summary>Exemplos</summary>
@@ -409,7 +409,7 @@ it('Alert...', () => {
 </details>
 
 ---
-## 7 - Mocks
+## 7. Mocks
 
 #### **`cy.stub()`**  
 Substitui uma função, armazena iterações e controla comportamento de retorno.  
@@ -487,7 +487,7 @@ it('Get data form fixture file', () => {
 </details>  
 
 ---
-## 8 - Plugins
+## 8. Plugins
 No arquivo `cypress/support/index.js` adicionar a importação do plugin:  
 ```js
 require('nome plugin')
@@ -502,7 +502,7 @@ it('finds list items', () => {
 })
 ```
 ---
-## 9 - 📄 Documentações
+## 9. 📄 Documentações
 - [Docs cypress assertions](https://docs.cypress.io/guides/references/assertions)
 - [Doc Plugins](https://docs.cypress.io/plugins/directory)
 - [Doc stub](https://docs.cypress.io/api/commands/stub)
