@@ -47,6 +47,14 @@ Acessa objeto window da página.
 
 #### **`comando.as(<'alias'>)`**  
 Cria um nome para o evento, operação etc. Podem ser capturados com: `cy.get('@alias')`
+```js
+it('Get response with alias', () => {
+    cy.request({...}).as('response')
+    cy.get('@response').then(res => {
+        expect(res.status).to.be.equal(200)
+    })
+})
+```
 
 ### 2.1 Criar comando personalizado
 No arquivo `/cypress/support/commands.js` podem ser adicionados comandos personalizados, passando a seguinte expressão:
@@ -96,22 +104,6 @@ it('Wrap...', () => {
 ```
 </details>  
 
-#### **`comando.its(<propriedade>)`**  
-Acessa uma propriedade do objeto que está no meio da cadeia do cypress.  
-
-<details>
-<summary>Exemplos</summary>
-
-```js
-it.only('Its...', () => {
-    const obj = {name: 'User', age: 20, endereco: {rua: 'josé ventura'}}
-    cy.wrap(obj).its('name').should('be.equal', 'User')
-    cy.wrap(obj).its('endereco').should('have.property', 'rua')
-    // cy.wrap(obj).its('endereco').its('rua').should('contain', 'ventura')
-    cy.wrap(obj).its('endereco.rua').should('contain', 'ventura')
-})
-```
-</details>  
 
 #### **`comando.invoke(<função>, [parametros])`**  
 Acessa uma função do objeto que está no meio da cadeia do cypress.  
@@ -256,9 +248,6 @@ Verifica se string possui valor passado por parâmetro.
 #### **`match(<regex>)`**  
 Verifica se string possui regex passada por parâmetro.  
 
-<details>
-<summary>Exemplos</summary>
-
 ```js
 it('String', () => {
     const string = 'gui';
@@ -268,7 +257,6 @@ it('String', () => {
     expect(string).to.match(/^gui$/);
 })
 ```
-</details>
 
 ---
 
@@ -283,9 +271,6 @@ valor esperado deve ser acima do valor passado por parametro.
 #### **`closeTo(<valor>, <delta>)`**  
 Verifica se valor é próximo do valor passado de acordo com a precisão passada no delta.
 
-<details>
-<summary>Exemplos</summary>
-
 ```js
 it('Numbers', () => {
     const int = 2;
@@ -299,7 +284,6 @@ it('Numbers', () => {
     expect(float).to.be.above(2);
 })
 ```
-</details>
 
 ---
 
@@ -309,32 +293,41 @@ it('Numbers', () => {
 Compara objetos pelo conteúdo.
 
 #### **`include(<valor>)`**  
-Verifica se possui parte do valor passada por parametro.
+Verifica se possui parte do valor passada por parametro.  
 
 #### **`have.property(prop, [valor])`**  
 Compara se existe propriedade objeto, como também valor se for passado no segundo parâmetro.
 
-<details>
-<summary>Exemplos</summary>
+```js
+const obj = {
+    a: 1,
+    b: 2
+}
+
+// mesma referencia true
+expect(obj).to.be.equal(obj) 
+
+// deep | eql comparam conteúdo do objeto e não referência
+expect(obj).deep.equal({ a: 1, b: 2 })
+expect(obj).eql({ a: 1, b: 2 })
+expect(obj).include({ a: 1 })
+expect(obj).to.have.property('b')
+expect(obj).to.have.property('b', 2)
+expect(obj).to.not.be.empty
+```
+
+#### **`its(<propriedade>)`**  
+Acessa uma propriedade do objeto que está no meio da cadeia do cypress.  
 
 ```js
-    const obj = {
-        a: 1,
-        b: 2
-    }
-
-    // mesma referencia true
-    expect(obj).to.be.equal(obj) 
-
-    // deep | eql comparam conteúdo do objeto e não referência
-    expect(obj).deep.equal({ a: 1, b: 2 })
-    expect(obj).eql({ a: 1, b: 2 })
-    expect(obj).include({ a: 1 })
-    expect(obj).to.have.property('b')
-    expect(obj).to.have.property('b', 2)
-    expect(obj).to.not.be.empty
+it.only('Its...', () => {
+    const obj = {name: 'User', age: 20, endereco: {rua: 'josé ventura'}}
+    cy.wrap(obj).its('name').should('be.equal', 'User')
+    cy.wrap(obj).its('endereco').should('have.property', 'rua')
+    // cy.wrap(obj).its('endereco').its('rua').should('contain', 'ventura')
+    cy.wrap(obj).its('endereco.rua').should('contain', 'ventura')
+})
 ```
-</details>
 
 ---
 
@@ -363,7 +356,7 @@ it('Arrays', () => {
 
 ---  
 
-## 6. Interação com DOM
+## 6. Interação com Front-end (DOM)
 
 #### **`type(<texto [{expressão}]>, [{ delay: <ms> }])`**  
 Escreve texto no elemento selecionado previamente. 
@@ -395,8 +388,6 @@ Seleciona elementos na página.
 
 #### **`cy.on(<evento>, callback())`**  
 Espera eventos que ocorrem no browser, executa função passada.  
-<details>
-<summary>Exemplos</summary>
 
 ```js
 it('Alert...', () => {
@@ -406,25 +397,27 @@ it('Alert...', () => {
     })
 })
 ```
-</details>
+
+---  
+## 7. Interação com Back-end (REST)
+#### **`cy.request()`**  
+Faz requisição real ao endpoint passado.  
+
 
 ---
-## 7. Mocks
+## 8. Mocks
 
 #### **`cy.stub()`**  
 Substitui uma função, armazena iterações e controla comportamento de retorno.  
 
-<details>
-<summary>Sintaxe</summary>  
+**Sintaxe**  
 
 ```JS  
 cy.stub()
 cy.stub(object, method)
 cy.stub(object, method, replacerFn)
 ```
-</details>
-<details>
-<summary>Exemplos</summary>
+**Exemplos**
 
 ```js
 it('Alert com stub...', () => {
@@ -465,9 +458,6 @@ it('Stub com várias chamadas...', () => {
 #### **`cy.fixture(<arquivo>)`**  
 Importa um arquivo para mock que esteja criado dentro da pasta /cypress/fixtures.  
 
-<details>
-<summary>Exemplos</summary>
-
 ```js
 it('Get data form fixture file', () => {
     cy.fixture('userData').as('user').then(function () {
@@ -487,7 +477,7 @@ it('Get data form fixture file', () => {
 </details>  
 
 ---
-## 8. Plugins
+## 9. Plugins
 No arquivo `cypress/support/index.js` adicionar a importação do plugin:  
 ```js
 require('nome plugin')
@@ -502,7 +492,7 @@ it('finds list items', () => {
 })
 ```
 ---
-## 9. 📄 Documentações
+## 10. 📄 Documentações
 - [Docs cypress assertions](https://docs.cypress.io/guides/references/assertions)
 - [Doc Plugins](https://docs.cypress.io/plugins/directory)
 - [Doc stub](https://docs.cypress.io/api/commands/stub)
