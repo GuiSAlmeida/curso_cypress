@@ -10,6 +10,16 @@ Linha para ajudar vs-code a reconhecer cypress e fornecer snippets.
 ```js
 /// <reference types="cypress" />
 ```
+
+### 1.1. Cypress.json
+Algumas configurações importantes podem ser passadas nesse arquivo.  
+```js
+{
+    "baseUrl": "https://guisalmeida.com"
+}
+```
+
+
 ---  
 
 ## 2. Comandos gerais
@@ -401,8 +411,17 @@ it('Alert...', () => {
 ---  
 ## 7. Interação com Back-end (REST)
 #### **`cy.request()`**  
-Faz requisição real ao endpoint passado.  
-
+Faz requisição real ao endpoint passado. Aceita um objeto como parâmetro com alguns atributos como:  
+```js
+{
+    url: '',
+    method: '', // GET, PUT, POST, DELETE ...
+    headers: {},
+    body: {},
+    qs: {} // parâmetros que podem ser passados junto na url da requisição
+    failOnStatusCode: false //desabilita erro no teste quando a requisição retorna algum erro.
+}
+```
 
 ---
 ## 8. Mocks
