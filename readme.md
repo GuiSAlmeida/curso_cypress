@@ -19,63 +19,62 @@ Algumas configurações importantes podem ser passadas nesse arquivo.
 }
 ```
 
-
 ---  
 
 ## 2. Comandos gerais
 
-#### **`it()`**  
+#### **it()**  
 serve para descrever e criar testes para cada caso.
 
-#### **`describe()`**  
+#### **describe()**  
 Serve para descrever e agrupar testes.
 
-#### **`comando.skip()`**  
+#### **skip()**  
 Pula o teste ou um grupo de testes.
 
-#### **`comando.only()`**  
+#### **only()**  
 Executa apenas o teste ou grupo especificado.  
 > **Only** Pega apenas um por arquivo para executar. Se houver mais de um vai ser executo o ultimo encontrado.
 
-#### **`debug()`**  
+#### **debug()**  
 Pegar mais detalhes sobre algum determinado ponto do teste e imprime no console infos.
 
-#### **`pause()`**  
+#### **pause()**  
 Pausa a execução e permite ser executado passo a passo.
 
-#### **`cy.get(<valor>)`**  
+#### **cy.get(\<valor\>)**  
 Busca elementos por classe, tag, id, etc.
 
-#### **`cy.contains(<valor>)`**  
+#### **cy.contains(\<valor\>)**  
 Busca elementos pelo texto.
 
-#### **`cy.reload()`**  
+#### **cy.reload()**  
 Recarrega a página.
 
-#### **`cy.window()`**  
+#### **cy.window()**  
 Acessa objeto window da página.
 
-#### **`comando.as(<'alias'>)`**  
-Cria um nome para o evento, operação etc. Podem ser capturados com: `cy.get('@alias')`
+#### **as()**  
+Cria um nome para o evento, operação etc. Podem ser capturados com: `cy.get('@alias')`.  
+Exemplo:
 ```js
 it('Get response with alias', () => {
     cy.request({...}).as('response')
+
     cy.get('@response').then(res => {
         expect(res.status).to.be.equal(200)
     })
 })
 ```
 
-### 2.1 Criar comando personalizado
+### 2.1. Criar comando personalizado
 No arquivo `/cypress/support/commands.js` podem ser adicionados comandos personalizados, passando a seguinte expressão:
 ```js
 Cypress.Commands.add("nomeComando", callback())
 ```  
 > Não precisa importá-lo no arquivo de teste.
 
-<details>
-<summary>Exemplos</summary>
-
+Exemplo:
 ```js
 // código no arquivo commands.js
 Cypress.Commands.add("clickAlert", (locator, message) => {
@@ -89,17 +88,35 @@ it('Alert...', () => {
     cy.clickAlert('#alert', 'Alert Simples')
 })
 ```
-</details>  
+
+### 2.2. Sobrescrever comando
+É possivel sobrescrever comandos do cypress, para isso no arquivo `/cypress/support/commands.js` usa-se a sintaxe:  
+
+```js
+Cypress.Commands.overwrite("nomeComando", callback())
+```  
+Exemplo:
+```js
+Cypress.Commands.overwrite('request', (originalFn, ...options) => {
+    if (options.length === 1) {
+        if (Cypress.env('token')) {
+            options[0].headers = { 
+                Authorization: `JWT ${Cypress.env('token')}`
+            }
+        }
+    }
+
+    return originalFn(...options)
+})
+```
 
 ---  
 ## 3. Helpers
 
-#### **`cy.wrap(<objeto>)`**  
+#### **cy.wrap(\<objeto\>)**  
 Encapsula como um objeto do cypress. Também usado para gerenciar promises externas.  
 
-<details>
-<summary>Exemplos</summary>
-
+Exemplo:
 ```js
 it('Wrap...', () => {
     const obj = {name: 'User', age: 20}
@@ -112,29 +129,25 @@ it('Wrap...', () => {
     })
 })
 ```
-</details>  
 
 
-#### **`comando.invoke(<função>, [parametros])`**  
+
+#### **invoke**(\<função\>, [parametros])  
 Acessa uma função do objeto que está no meio da cadeia do cypress.  
 
-<details>
-<summary>Exemplos</summary>
-
+Exemplo:
 ```js
 it.only('Invoke...', () => {
     const soma = (a, b) => a + b;
     cy.wrap({ fn: soma }).invoke('fn', 2, 5).should('be.equal', 7)
 })
 ```
-</details>  
 
-#### **`comando.each(<callback()>)`**  
+
+#### **each**(\<callback()\>)  
 Semelhante ao `foreach` da JS porém é nativo do cypress, percorre lista de elementos e retorna em uma função callback cada elemento em jquery que podem ser testados de diversas maneiras.  
 
-<details>
-<summary>Exemplos</summary>
-
+Exemplo:
 ```js
 it('Select almost all with each...', () => {
     cy.get('[name=formComidaFavorita]').each($el => {
@@ -146,20 +159,18 @@ it('Select almost all with each...', () => {
     })
 })
 ```
-</details>  
 
-#### **`cy.wait(<ms>)`**  
+#### cy.**wait**(\<ms\>)  
 Espera no fluxo do teste.  
 
-#### **`cy.tick(<ms>)`**  
+#### cy.**tick**(\<ms\>)  
 Avança o tempo no fluxo do teste. 
 
-#### **`cy.clock(<Date()>)`**
+#### cy.**clock**(\<Date()\>)
 Pode ser usado para definir/resetar uma data padrão no teste.  
-> Não pode ser executado mais de 1x no teste.
-<details>
-<summary>Exemplos</summary>
+> Não pode ser executado mais de 1x no teste.  
 
+Exemplo:
 ```js
 it('Going back to the past', () => {
     const dt = new Date(1987, 2, 24, 2, 0, 0)
@@ -168,40 +179,57 @@ it('Going back to the past', () => {
     cy.get('#resultado > span').should('contain', '24/03/1987')
 })
 ```
-</details>  
+
+### 3.1. Lib MomentJS
+Já inserida por padrão no Cypress, auxilia na manipulação de datas.  
+Exemplo:
+```js
+cy.request({
+    url: '/transacoes',
+    method: 'POST',
+    headers: { Authorization: `JWT ${token}` },
+    body: {
+        conta_id: contaId,
+        data_pagamento: Cypress.moment().add({ days: 1 }).format('DD/MM/YYYY'),
+        data_transacao: Cypress.moment().format('DD/MM/YYYY'),
+        descricao: "Aluguel pago",
+        valor: "800"
+    },
+})
+```
 
 ---
 
 ## 4. Hooks
 
-#### **`before(<callback()>)`**
+#### **before**(\<callback()\>)
 (Before All) Executa função callback passada **antes** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
 
-#### **`beforeEach(<callback()>)`**  
+#### **beforeEach**(\<callback()\>)  
 (Before Each) Executa função callback passada **antes** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
 
-#### **`after(<callback()>)`**  
+#### **after**(\<callback()\>)  
 (After All) Executa função callback passada **depois** de todos os testes de um determinado bloco **`describe`** onde foi adicionado.
 
-#### **`afterEach(<callback()>)`**  
+#### **afterEach**(\<callback()\>)  
 (After Each) Executa função callback passada **depois** de cada teste de um determinado bloco **`describe`** onde foi adicionado.
 
 ---  
 
 ## 5. Assertivas
 
-#### **`Expect`**
+#### **Expect**
 > Quando já possuimos o valor para fazer a assertiva podemos usar o **Expect**.  
 > `expect(<valor>, [mensagem em caso de erro])` - Comando para fazer assertivas.
 
-#### **`Should`**
+#### **Should**
 > Quando temos que buscar e aguardar o valor para fazer a assertiva podemos usar o **Should** encadeado logo após o comando da requisição.
 > `comando().should(<comando>, <valor>)`  
 
-#### **`Then`**
+#### **Then**
 > Parecido com should também permite receber resultados do comando anterior encadeado. Mas com algumas diferenças.
 > `comando().then(<comando>, <valor>)` 
-### 5.1 Diferenças Should x Then
+### 5.1. Diferenças Should x Then
 |Should|then|
 |:---:|:---:|
 |fica sendo executado</br>ao longo da espera|aguarda receber</br>resultado da promise|
@@ -210,28 +238,26 @@ it('Going back to the past', () => {
 
 ---
 
-### 5.2 Comandos comuns
+### 5.2. Comandos comuns
 
-#### **`equals(<valor>) | equal(<valor>) | eq(<valor>)`**  
+#### **equals**(\<valor\>) | equal(\<valor\>) | eq(\<valor\>)  
 Comando para verificar igualdade.
 
-#### **`not.comando()`**  
+#### **not**.comando()  
 Usado antes dos comandos para indicar negação
 
-#### **`to.be.comando()`**  
+#### **to**.**be**.comando()  
 Pode ser usado para melhorar legibilidade do teste.
 
-#### **`empty`**  
+#### **empty**  
 Verifica se está vazio.
 
 ---
 
-### 5.3 Types
-#### **`to.be.a(<tipo>)`**  
-Verifica se o tipo do valor é igual o tipo passado por parâmetro.
-
-<details>
-<summary>Exemplos</summary>
+### 5.3. Types
+#### **to.be.a**(\<tipo\>)  
+Verifica se o tipo do valor é igual o tipo passado por parâmetro.  
+Exemplo:
 
 ```js
 it('Types', () => {
@@ -244,20 +270,19 @@ it('Types', () => {
     expect([]).to.be.a('array')
 })
 ```
-</details>  
 
 ---
 
-### 5.4 Strings
-#### **`length(<valor>)`**  
+### 5.4. Strings
+#### **length**(\<valor\>)  
 Verifica tamanho da string.  
 
-#### **`contains(<valor>)`**  
+#### **contains**(\<valor\>)  
 Verifica se string possui valor passado por parâmetro.  
 
-#### **`match(<regex>)`**  
+#### **match**(\<regex\>)  
 Verifica se string possui regex passada por parâmetro.  
-
+Exemplo:
 ```js
 it('String', () => {
     const string = 'gui';
@@ -270,17 +295,17 @@ it('String', () => {
 
 ---
 
-### 5.5 Numbers
+### 5.5. Numbers
 
-#### **`below(<valor>)`**  
+#### **below**(\<valor\>)  
 valor esperado deve ser abaixo do valor passado por parametro.
 
-#### **`above(<valor>)`**  
+#### **above**(\<valor\>)  
 valor esperado deve ser acima do valor passado por parametro.
 
-#### **`closeTo(<valor>, <delta>)`**  
-Verifica se valor é próximo do valor passado de acordo com a precisão passada no delta.
-
+#### **closeTo**(\<valor\>, \<delta\>)  
+Verifica se valor é próximo do valor passado de acordo com a precisão passada no delta.  
+Exemplo:
 ```js
 it('Numbers', () => {
     const int = 2;
@@ -297,17 +322,17 @@ it('Numbers', () => {
 
 ---
 
-### 5.6 Object
+### 5.6. Object
 
-#### **`deep.equal() | eql()`**  
+#### **deep.equal**() | eql()  
 Compara objetos pelo conteúdo.
 
-#### **`include(<valor>)`**  
+#### **include**(\<valor\>)  
 Verifica se possui parte do valor passada por parametro.  
 
-#### **`have.property(prop, [valor])`**  
-Compara se existe propriedade objeto, como também valor se for passado no segundo parâmetro.
-
+#### **have.property**(prop, [valor])  
+Compara se existe propriedade objeto, como também valor se for passado no segundo parâmetro.  
+Exemplo:
 ```js
 const obj = {
     a: 1,
@@ -326,9 +351,9 @@ expect(obj).to.have.property('b', 2)
 expect(obj).to.not.be.empty
 ```
 
-#### **`its(<propriedade>)`**  
+#### **its**(\<propriedade\>)  
 Acessa uma propriedade do objeto que está no meio da cadeia do cypress.  
-
+Exemplo:
 ```js
 it.only('Its...', () => {
     const obj = {name: 'User', age: 20, endereco: {rua: 'josé ventura'}}
@@ -341,16 +366,14 @@ it.only('Its...', () => {
 
 ---
 
-### 5.7 Arrays
+### 5.7. Arrays
 
-#### **`to.have.members(<valor>)`**  
+#### **to.have.members**(\<valor\>)  
 Verifica se array possui **todos** os seguintes membros passados por parâmetro.
 
-#### **`to.include.members(<valor>)`**  
-Verifica se array possui os seguintes membros passados por parâmetro.
-
-<details>
-<summary>Exemplos</summary>
+#### **to.include.members**(\<valor\>)  
+Verifica se array possui os seguintes membros passados por parâmetro.  
+Exemplo:
 
 ```js
 it('Arrays', () => {
@@ -362,13 +385,12 @@ it('Arrays', () => {
     expect([]).to.be.empty
 })
 ```
-</details>
 
 ---  
 
 ## 6. Interação com Front-end (DOM)
 
-#### **`type(<texto [{expressão}]>, [{ delay: <ms> }])`**  
+#### **type**(\<texto [{expressão}]\>, [{ delay: <ms> }])  
 Escreve texto no elemento selecionado previamente. 
 > No type podem ser passadas palavras chave dentro de {} junto na string para simular algum comportamento em tempo de execução.  
 > Algumas expressões:
@@ -378,16 +400,16 @@ Escreve texto no elemento selecionado previamente.
 > No campo opcional `delay` é possivel setar um tempo em milisegundos, útil para campos de texto que possuem eventos JS como *debounce* que a medida que se digita ocorre algum evento.
 
 
-#### **`clear()`**  
+#### **clear**()  
 Apaga um campo de texto. 
 
-#### **`click({parametros})`**  
+#### **click**({parametros})  
 Efetua evento de click.  
 > No click podem ser passadas palavras chave dentro de {} junto na string para simular algum comportamento em tempo de execução.  
 > Alguns parametros:
 > + {multiple: true} - efetua evento em todos clicáveis selecionados.
 
-#### **`cy.get(<valor>, {parametros})`**  
+#### cy.**get**(\<valor\>, {parametros})  
 Seleciona elementos na página.  
 > No get podem ser passadas palavras chave dentro de {} junto na string para simular algum comportamento em tempo de execução.  
 > Alguns parametros:
@@ -396,9 +418,9 @@ Seleciona elementos na página.
 > OBS: para aplicar timeout padrão para toda aplicação alterar **{"defaultCommandTimeout": \<ms>}** no config.json.
 
 
-#### **`cy.on(<evento>, callback())`**  
+#### cy.**on**(\<evento\>, callback())  
 Espera eventos que ocorrem no browser, executa função passada.  
-
+Exemplo:
 ```js
 it('Alert...', () => {
     cy.get('#alert').click()
@@ -410,7 +432,7 @@ it('Alert...', () => {
 
 ---  
 ## 7. Interação com Back-end (REST)
-#### **`cy.request()`**  
+#### cy.**request**()  
 Faz requisição real ao endpoint passado. Aceita um objeto como parâmetro com alguns atributos como:  
 ```js
 {
@@ -418,7 +440,7 @@ Faz requisição real ao endpoint passado. Aceita um objeto como parâmetro com 
     method: '', // GET, PUT, POST, DELETE ...
     headers: {},
     body: {},
-    qs: {} // parâmetros que podem ser passados junto na url da requisição
+    qs: {}, // (query string) parâmetros que podem ser passados junto na url da requisição
     failOnStatusCode: false //desabilita erro no teste quando a requisição retorna algum erro.
 }
 ```
@@ -426,17 +448,18 @@ Faz requisição real ao endpoint passado. Aceita um objeto como parâmetro com 
 ---
 ## 8. Mocks
 
-#### **`cy.stub()`**  
+#### cy.**stub**()  
 Substitui uma função, armazena iterações e controla comportamento de retorno.  
 
-**Sintaxe**  
+Sintaxe:  
 
 ```JS  
 cy.stub()
 cy.stub(object, method)
 cy.stub(object, method, replacerFn)
 ```
-**Exemplos**
+
+Exemplo:
 
 ```js
 it('Alert com stub...', () => {
@@ -472,11 +495,11 @@ it('Stub com várias chamadas...', () => {
     cy.get('#resultado > :nth-child(1)').should('have.text', 'Cadastrado!')
 })
 ```
-</details>
 
-#### **`cy.fixture(<arquivo>)`**  
+
+#### cy.**fixture**(\<arquivo\>)  
 Importa um arquivo para mock que esteja criado dentro da pasta /cypress/fixtures.  
-
+Exemplo:
 ```js
 it('Get data form fixture file', () => {
     cy.fixture('userData').as('user').then(function () {
@@ -493,17 +516,25 @@ it('Get data form fixture file', () => {
 })
 
 ```
-</details>  
 
 ---
 ## 9. Plugins
+Cypress dá suporte a vários plugins, os oficiais podem ser consultados no site na parte de [Plugins](https://docs.cypress.io/plugins/directory) da documentação.
+
+### 9.1. Usando plugins
+Instalar pacote:
+```sh
+npm install -D nome-plugin
+```
+
 No arquivo `cypress/support/index.js` adicionar a importação do plugin:  
 ```js
 require('nome plugin')
 ```  
 
-#### **`Xpath`**
-https://github.com/cypress-io/cypress-xpath
+### 9.2. Plugin **Xpath**
+Adiciona comandos de busca por [XPath](https://github.com/cypress-io/cypress-xpath).  
+Exemplo:
 ```JS  
 it('finds list items', () => {
     cy.xpath('//ul[@class="todo-list"]//li')
@@ -511,9 +542,10 @@ it('finds list items', () => {
 })
 ```
 ---
-## 10. 📄 Documentações
+## 10. Documentações
 - [Docs cypress assertions](https://docs.cypress.io/guides/references/assertions)
 - [Doc Plugins](https://docs.cypress.io/plugins/directory)
 - [Doc stub](https://docs.cypress.io/api/commands/stub)
 - [Doc eventos window](https://docs.cypress.io/api/events/catalog-of-events#Event-Types)
+- [MomentJS](https://momentjs.com/)
 - [xpath cookbook](https://www.red-gate.com/simple-talk/development/dotnet-development/xpath-css-dom-and-selenium-the-rosetta-stone/)
