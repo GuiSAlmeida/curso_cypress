@@ -19,6 +19,40 @@ Algumas configurações importantes podem ser passadas nesse arquivo.
 }
 ```
 
+### 1.2. Rodando testes
+No arquivo `package.json` podemos passar os seguintes scripts para rodar os testes:
+```json
+{
+    "scripts": {
+        "cypress:run": "cypress run",
+        "cypress:open": "cypress open"
+    }
+}
+```
+
+No terminal passamos os comandos:
+- **Run** vai rodar os testes via terminal.
+- **Open** vai abrir a interface gráfica onde são exibidos testes com interação com a aplicação.  
+
+```sh
+npm run cypress:run
+npm run cypress:open
+```
+
+No modo run via terminal o cypress gera uma pasta de screenshots para os erros e também uma pasta videos com a execução gravada mostrando a interface.  
+Para desativar a gravação de vídeos, deve configurar o arquivo cypress.json:
+```json
+{
+    "video": false
+}
+```
+
+Na interface é possivel escolhar os arquivos para serem executados, na linha de comando para executar um arquivo especifico deve-se passar o comando:
+```sh
+npm run cypress:run -- --spec caminho/arquivo.spec.js
+```
+
+
 ---  
 
 ## 2. Comandos gerais
@@ -430,6 +464,9 @@ it('Alert...', () => {
 })
 ```
 
+#### cy.**clearLocalStorage**()  
+Limpa local storage.
+
 ---  
 ## 7. Interação com Back-end (REST)
 #### cy.**request**()  
@@ -517,6 +554,46 @@ it('Get data form fixture file', () => {
 
 ```
 
+#### cy.**server**({options})  
+Inicia um servidor para começar a rotear as respostas pelo `cy.route()` e para alterar o comportamento das solicitações de rede.
+Exemplo:
+```js
+cy.server({
+  method: 'POST',
+  delay: 1000,
+  status: 422,
+  response: {},
+})
+```
+#### cy.**route**({options})  
+Gerencia o comportamento das requests.  
+Exemplo:
+```js
+cy.route({
+    method: 'POST',
+    url: '/signin',
+    response: {
+        id: 1000,
+        nome: 'usuario',
+        token: 'Uma_string_muito_grande'
+    }
+}).as('signin')
+```
+
+> ⚠️ `cy.serve()` e `cy.route()` estão obsoletos a partir do **Cypress 6.0.0**.  
+> Considere usar `cy.route()` em vez disso.
+
+#### cy.**intercept**({options})  
+Spy e stub requests e responses.  
+
+Exemplo: 
+```js
+cy.route({
+  method: 'POST',
+  url: 'https://example.cypress.io/users',
+}).as('getUsers')
+```
+
 ---
 ## 9. Plugins
 Cypress dá suporte a vários plugins, os oficiais podem ser consultados no site na parte de [Plugins](https://docs.cypress.io/plugins/directory) da documentação.
@@ -544,8 +621,11 @@ it('finds list items', () => {
 ---
 ## 10. Documentações
 - [Docs cypress assertions](https://docs.cypress.io/guides/references/assertions)
-- [Doc Plugins](https://docs.cypress.io/plugins/directory)
-- [Doc stub](https://docs.cypress.io/api/commands/stub)
 - [Doc eventos window](https://docs.cypress.io/api/events/catalog-of-events#Event-Types)
+- [Doc stub](https://docs.cypress.io/api/commands/stub)
+- [Doc Plugins](https://docs.cypress.io/plugins/directory)
+- [Migrando cy.route para cy.route](https://docs.cypress.io/guides/references/migration-guide#Migrating-cy-route-to-cy-intercept)
 - [MomentJS](https://momentjs.com/)
+- [Screenshot](https://docs.cypress.io/guides/references/configuration#Screenshots)
 - [xpath cookbook](https://www.red-gate.com/simple-talk/development/dotnet-development/xpath-css-dom-and-selenium-the-rosetta-stone/)
+- [Video](https://docs.cypress.io/guides/references/configuration#Videos)

@@ -29,7 +29,8 @@ const locators = {
         LINHAS: '.list-group li',
         FN_XP_BUSCA_ELEMENTO: (desc, value) => `//span[contains(., '${desc}')]//following-sibling::small[contains(., '${value}')]`,
         FN_XP_REMOVER_ELEMENTO: nomeConta => `//span[contains(., '${nomeConta}')]/../../..//i[@class="far fa-trash-alt"]`,
-        FN_XP_ALTERAR_ELEMENTO: nomeConta => `//span[contains(., '${nomeConta}')]/../../..//i[@class="fas fa-edit"]`
+        FN_XP_ALTERAR_ELEMENTO: nomeConta => `//span[contains(., '${nomeConta}')]/../../..//i[@class="fas fa-edit"]`,
+        FN_XP_LINHA: desc => `//span[contains(.,'${desc}')]/../../../..`
     },
     SALDO: {
         FN_XP_SALDO_CONTA: nomeConta => `//td[contains(., '${nomeConta}')]/../td[2]`
