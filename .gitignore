@@ -1,0 +1,10 @@
+
+# gitignore template for the CypressIO, browser test framework
+
+cypress/results/*
+cypress/reports/*
+cypress/screenshots/*
+cypress/videos/*
+
+# Dependency directories
+node_modules/
