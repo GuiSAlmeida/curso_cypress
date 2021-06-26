@@ -581,7 +581,7 @@ cy.route({
 ```
 
 > ⚠️ `cy.serve()` e `cy.route()` estão obsoletos a partir do **Cypress 6.0.0**.  
-> Considere usar `cy.route()` em vez disso.
+> Considere usar `cy.intercept()` em vez disso.
 
 #### cy.**intercept**({options})  
 Spy e stub requests e responses.  
