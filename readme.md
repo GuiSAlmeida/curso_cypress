@@ -70,10 +70,10 @@ Pula o teste ou um grupo de testes.
 Executa apenas o teste ou grupo especificado.  
 > **Only** Pega apenas um por arquivo para executar. Se houver mais de um vai ser executo o ultimo encontrado.
 
-#### **debug()**  
+#### **cy.debug()**  
 Pegar mais detalhes sobre algum determinado ponto do teste e imprime no console infos.
 
-#### **pause()**  
+#### **cy.pause()**  
 Pausa a execução e permite ser executado passo a passo.
 
 #### **cy.get(\<valor\>)**  
